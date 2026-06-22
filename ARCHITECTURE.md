@@ -20,6 +20,9 @@ This document outlines the architecture and technical decisions for integrating 
 
 `<model-viewer>` is a Google web component that abstracts 3D rendering and AR handoff into a few lines of declarative markup. It handles lighting, shadows, camera controls, and platform-specific AR automatically. In React + Vite, it is used as a custom element alongside standard JSX.
 
+``Trade-offs & Limitations:``  
+While highly optimized for single-asset product viewing, <model-viewer> operates as an isolated document viewer. It strictly enforces a 1-to-1 relationship with its source file and cannot dynamically load multiple distinct 3D models into a shared coordinate space. If future requirements mandate complex multi-model scene building or object collision, the rendering engine would need to be migrated to React Three Fiber (Three.js).
+
 ### Setup in React
 
 Install the package:
@@ -206,3 +209,12 @@ The `ModelViewer` component then just points to `http://localhost:3000/models/fr
 
 ### Implement Lazy Loading and Suspense for 3D Assets
 To optimize performance and ensure a seamless user experience, 3D models fetched from the database should utilize lazy loading (via the <model-viewer> poster attribute) or React Suspense boundaries. This prevents layout shift and provides immediate visual feedback during heavy asset downloads.
+
+### Future Roadmap: Multi-Model Viewing & Scene Building
+
+If future project requirements dictate the need to load two or more distinct models into the same environment (e.g., side-by-side comparison, collision testing, or virtual room staging), the architecture will need to pivot from isolated document viewers to a unified rendering canvas.
+
+**Architectural Recommendation:**
+For multi-model scenes, we recommend migrating the specific 3D viewport to **React Three Fiber (R3F)** and **Three.js**. 
+* **Shared Context:** R3F allows multiple `.glb` models to exist within a single `<Canvas>`, meaning they will share the same global lighting, shadows, and coordinate space.
+* **Hybrid Approach:** `<model-viewer>` can be retained specifically for mobile AR handoffs, while R3F handles complex, multi-asset web rendering.
