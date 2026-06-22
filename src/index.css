@@ -1,0 +1,16 @@
+/* src/index.css */
+
+/* 1. Kill all default browser margins and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2. Force the page to be exactly the size of the screen */
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Stops accidental scrollbars */
+  background-color: #f3f4f6; /* A nice soft gray background */
+}
