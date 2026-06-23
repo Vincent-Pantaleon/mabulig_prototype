@@ -13,8 +13,9 @@ export default function ModelViewer({ alt, src, iosSrc }: ModelViewerTypes) {
         <ModelViewerTag 
             alt={alt}
             src={src}
-            iosSrc={iosSrc}
-            ar
+            ios-src={iosSrc}
+            ar="true"
+            ar-modes="webxr scene-viewer quick-look"
             camera-controls="true"
             shadow-intensity="2"
             touch-action="pan-y"
