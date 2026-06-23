@@ -29,12 +29,11 @@ function App() {
     { 
       name: "Robot", 
       src: "/models/robot_mouse.glb", 
-      iosSrc: "/models/robot_mouse_ios.glb",
-      alt: "This is a 3D model of a dog." 
+      iosSrc: "/models/robot_mouse_ios.usdz", /* FIXED: Must be a .usdz file for iOS */
+      alt: "This is a 3D model of a robot dog." 
     }
   ]
 
-  // 2. Removed 'setModel' until you actually need it (or you can leave it and ignore the yellow warning!)
   const [model, setModel] = useState<modelObject>(models[0])
   
   return (
