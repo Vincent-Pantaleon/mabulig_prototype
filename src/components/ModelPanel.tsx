@@ -1,12 +1,15 @@
+import { useState } from "react";
 import type { ModelSpecs } from "../App";
 
 interface ModelPanelProps {
-  title?: string;
-  description?: string;
-  specs?: ModelSpecs;
+    title?: string;
+    description?: string;
+    specs?: ModelSpecs;
 }
 
 export default function ModelPanel ({title, description, specs}: ModelPanelProps) {
+    const [isCollapsed, setIsCollapsed] = useState(false);
+
     return (
         <>
             <style>{`
@@ -39,8 +42,29 @@ export default function ModelPanel ({title, description, specs}: ModelPanelProps
                 }
 
                 .panel-header {
-                    margin-bottom: 16px;
+                    margin-bottom: ${isCollapsed ? '0' : '16px'};
                     flex-shrink: 0;
+                    cursor: pointer; /* Indicates it's clickable */
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    transition: opacity 0.2s ease;
+                }
+
+                .panel-header:hover {
+                    opacity: 0.7;
+                }
+
+                .header-text {
+                    flex: 1;
+                }
+
+                .toggle-icon {
+                    font-size: 0.9rem;
+                    color: #6b7280;
+                    margin-left: 12px;
+                    transition: transform 0.3s ease;
+                    transform: ${isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)'};
                 }
 
                 .panel-title {
@@ -117,13 +141,16 @@ export default function ModelPanel ({title, description, specs}: ModelPanelProps
             `}</style>
 
             <div className="model-panel">
-                <div className="panel-header">
-                    {title && <h2 className="panel-title">{title}</h2>}
-                    {description && <p className="panel-description">{description}</p>}
+                <div className="panel-header" onClick={() => setIsCollapsed(!isCollapsed)}>
+                    <div className="header-text">
+                        {title && <h2 className="panel-title">{title}</h2>}
+                        {!isCollapsed && description && <p className="panel-description">{description}</p>}
+                    </div>
+                    <span className="toggle-icon">▼</span>
                 </div>
                 
-                {/* Dynamically render specs if they exist */}
-                {specs && (
+                {/* Dynamically render specs if they exist and panel is NOT collapsed */}
+                {!isCollapsed && specs && (
                     <div className="panel-content">
                         {specs.license && <div className="spec-row"><span className="spec-label">License</span><span className="spec-value">{specs.license}</span></div>}
                         {specs.formats && <div className="spec-row"><span className="spec-label">Included 3D formats</span><span className="spec-value">{specs.formats}</span></div>}
